@@ -34,6 +34,7 @@ import binascii
 import argparse
 import logging
 import crc_fix
+from util import Xorshift
 
 haveCrypto = False
 
@@ -64,43 +65,6 @@ odd_primes = [
     1429, 1433, 1439, 1447, 1451, 1453, 1459, 1471, 1481, 1483, 1487, 1489, 1493, 1499, 1511, 1523,
     1531, 1543, 1549, 1553, 1559, 1567, 1571, 1579, 1583, 1597, 1601, 1607, 1609, 1613, 1619, 1621,
 ]
-
-class Xorshift:
-    def __init__(self, seed):
-        self.states = [0x6C078966, 0xDD5254A5, 0xB9523B81, 0x03DF95B3]
-
-        # initialize internal states
-        if seed == 0:
-            return
-        seed = seed ^ (seed >> 30)
-        seed = (seed * (0x6C078966 - 1)) & 0xFFFFFFFF
-        seed = seed + 1
-        self.states[0] = seed
-
-        t = seed ^ (seed >> 30)
-        t = (t * (0x6C078966 - 1)) & 0xFFFFFFFF
-        t = t + 2
-        self.states[1] = t
-
-        u = t ^ (t >> 30)
-        u = (u * (0x6C078966 - 1)) & 0xFFFFFFFF
-        u = u + 3
-        self.states[2] = u
-
-    def xorshift(self, arg):
-        x = self.states[0]
-        y = self.states[3]
-
-        self.states[0] = self.states[1]
-        self.states[1] = self.states[2]
-        self.states[2] = self.states[3]
-        x = x ^ ((x << 11) & 0xFFFFFFFF)
-        x = x ^ ((x >> 8) & 0xFFFFFFFF)
-        y = y ^ ((y >> 19) & 0xFFFFFFFF)
-        self.states[3] = x ^ y
-        if arg == 0:
-            return self.states[3]
-        return self.states[3] % arg
 
 class YWCipher(Xorshift):
     def __init__(self, seed, count):
