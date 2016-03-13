@@ -65,10 +65,8 @@ odd_primes = [
     1531, 1543, 1549, 1553, 1559, 1567, 1571, 1579, 1583, 1597, 1601, 1607, 1609, 1613, 1619, 1621,
 ]
 
-
-class YWCipher:
-    def __init__(self, seed, count):
-        self.table = [x for x in range(0x100)]
+class Xorshift:
+    def __init__(self, seed):
         self.states = [0x6C078966, 0xDD5254A5, 0xB9523B81, 0x03DF95B3]
 
         # initialize internal states
@@ -89,14 +87,6 @@ class YWCipher:
         u = u + 3
         self.states[2] = u
 
-        # generate table
-        for i in range(count):
-            r = self.xorshift(0x10000)
-            r1, r2 = r & 0xFF, (r >> 8) & 0xFF
-            if r1 != r2:
-                a, b = self.table[r1], self.table[r2]
-                self.table[a], self.table[b] = self.table[b], self.table[a]
-
     def xorshift(self, arg):
         x = self.states[0]
         y = self.states[3]
@@ -111,6 +101,19 @@ class YWCipher:
         if arg == 0:
             return self.states[3]
         return self.states[3] % arg
+
+class YWCipher(Xorshift):
+    def __init__(self, seed, count):
+        self.table = [x for x in range(0x100)]
+        super().__init__(seed)
+
+        # generate table
+        for i in range(count):
+            r = self.xorshift(0x10000)
+            r1, r2 = r & 0xFF, (r >> 8) & 0xFF
+            if r1 != r2:
+                a, b = self.table[r1], self.table[r2]
+                self.table[a], self.table[b] = self.table[b], self.table[a]
 
     def encrypt(self, data):
         out = bytearray()
