@@ -34,6 +34,7 @@ import binascii
 import argparse
 import logging
 import gamefix.shinuchi
+import gamefix.busters
 from util import Xorshift
 
 haveCrypto = False
@@ -175,7 +176,7 @@ class CCMCipher:
             return None
         return b"".join(message)
 
-def yw_proc(data, isEncrypt, key=None, head=None, preserveCRC=False, modifyOffset=None):
+def yw_proc(data, isEncrypt, key=None, head=None, validator=None):
     out = bytearray()
     length = len(data)
     new_crc32 = struct.unpack("<I", data[-8:-4])[0]
@@ -188,19 +189,11 @@ def yw_proc(data, isEncrypt, key=None, head=None, preserveCRC=False, modifyOffse
     out += c.encrypt(data[:-8])
     out += data[-8:]
     if isEncrypt:
-        if preserveCRC:
-            if 0 < modifyOffset + 4 < len(data):
-                struct.pack_into("<I", out, modifyOffset,
-                    crc_fix.crc32_fix(out[:-8], modifyOffset, new_crc32))
-            else:
-                logging.error("Invalid offset")
-                return None
-        else:
-            new_crc32 = binascii.crc32(out[:-8])
+        new_crc32 = binascii.crc32(out[:-8])
         struct.pack_into("<I", out, length - 8, new_crc32)
     return bytes(out)
 
-def yw2_proc(data, isEncrypt, key=b"5+NI8WVq09V7LI5w", head=None, modifyOffset=0xE1B0):
+def yw2_proc(data, isEncrypt, key=b"5+NI8WVq09V7LI5w", head=None, validator=gamefix.shinuchi.validate):
     """
     tested with Shin'uchi
     """
@@ -221,18 +214,18 @@ def yw2_proc(data, isEncrypt, key=b"5+NI8WVq09V7LI5w", head=None, modifyOffset=0
             logging.error("Invalid length of nonce")
             return None
         # validate and fix
-        result = gamefix.shinuchi.validate(data[0x20:])
+        result = validator(data[0x20:])
         if not result:
             logging.error("Invalid savedata")
             return None
         # encrypt except header
-        out = yw_proc(result, isEncrypt, preserveCRC=False)
+        out = yw_proc(result, isEncrypt)
         if not out:
             return None
         out = ccm.encrypt(out, nonce)
     return out
 
-def ywb_proc(data, isEncrypt, key=None, head=None, modifyOffset=0xCAFEBABE, getto=False):
+def ywb_proc(data, isEncrypt, key=None, head=None, validator=gamefix.busters.validate, getto=False):
     def sub(data, r1):
         r2 = struct.unpack("<I", data[0x10:0x10+4])[0]
         if r2 != 0:
@@ -243,12 +236,11 @@ def ywb_proc(data, isEncrypt, key=None, head=None, modifyOffset=0xCAFEBABE, gett
             return struct.unpack("<I", data[pos:pos+4])[0]
         return 0
 
-    if isEncrypt:
-        logging.warning("You cannot inject encrypted save data yet")
     key = bytearray()
 
     if not head:
-        logging.error("You need head.yw to process Yo-kai Watch Busters save data. Please specify the file with --head option.")
+        logging.error("You need head.yw to process Yo-kai Watch Busters save data."
+                      "Please specify the file with --head option.")
         return None
 
     with open(head, "rb") as f:
@@ -266,10 +258,10 @@ def ywb_proc(data, isEncrypt, key=None, head=None, modifyOffset=0xCAFEBABE, gett
         myCipher = YWCipher(a, sub(headData, 0x0A) & 0xFF)
         for i in range(0x10):
             key.append(myCipher.xorshift(0x100))
-    return yw2_proc(data, isEncrypt, key=bytes(key), modifyOffset=modifyOffset)
+    return yw2_proc(data, isEncrypt, key=bytes(key), validator=validator)
 
-def ywb_getto_proc(data, isEncrypt, key=None, head=None, modifyOffset=0xCAFEBABE, getto=False):
-    return ywb_proc(data, isEncrypt, key=key, head=head, modifyOffset=modifyOffset, getto=True)
+def ywb_getto_proc(data, isEncrypt, key=None, head=None, validator=gamefix.busters.validate, getto=True):
+    return ywb_proc(data, isEncrypt, key=key, head=head, validator=validator, getto=getto)
 
 def process(infile, outfile, gameType, isEncrypt, head=None):
     with open(infile, "rb") as f:

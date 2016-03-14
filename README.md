@@ -16,12 +16,12 @@ PyCrypto is necessary for handling save data of Yo-kai Watch 2 and Busters.
 | ------------------------------- | ---------- | ---------- |
 | Yo-kai Watch                    | yes        | yes        |
 | Yo-kai Watch 2 Shin'uchi        | yes        | yes        |
-| Yo-kai Watch Busters            | yes        | no         |
-| Yo-kai Watch Busters Getto-gumi | yes        | no         |
+| Yo-kai Watch Busters            | yes        | yes        |
+| Yo-kai Watch Busters Getto-gumi | yes        | yes        |
 
 ## Usage
 
-First dump game1.yw with svdt (for Getto-gumi, use SunShell or extdata_dump).
+First dump game1.yw with svdt (for Getto-gumi, use extdata_dump).
 Note the number depends on your save slot (1, 2 or 3).
 
 Decrypt game1.yw:
@@ -40,9 +40,6 @@ Decrypting, encrypting and injecting work with:
 
 * Yo-kai Watch
 * Yo-kai Watch 2 Shin'uchi
-
-Only decrypting works with:
-
 * Yo-kai Watch Busters
 * Yo-kai Watch Busters Getto-gumi
 
@@ -52,6 +49,18 @@ You can specify the game with "--game" option.
 * --game yw2 : Yo-kai Watch 2 Shin'uchi
 * --game ywb : Yo-kai Watch Busters
 * --game ywb_getto : Yo-kai Watch Busters Getto-gumi
+
+### Getto-gumi
+Example config.txt for Yo-kai Watch Busters Akanekodan Getto-gumi
+
+```
+; Akanekodan
+DUMP "000016c6:/yw-b_ca/head.yw" "dumps/000016c6/yw-b_ca/head.yw"
+DUMP "000016c6:/yw-b_ca/game1.yw" "dumps/000016c6/yw-b_ca/game1.yw"
+
+RESTORE "dumps/000016c6/yw-b_ca/game1.yw" "000016c6:/yw-b_ca/game1.yw"
+RESTORE "dumps/000016c6/yw-b_ca/game1.yw" "000016c6:/yw-b_da/game1.yw"
+```
 
 ## Tools
 ### tools/dump.py
@@ -101,10 +110,3 @@ dump.py has --thornyan option, which changes all of your Yo-kai into Thornyan.
 ## License
 
 MIT License
-
-## お願い
-
-バスターズのセーブデータは、現状復号はできますが書き戻せません(破損扱い)。
-これを解決するために、CYBER セーブエディターがどう処理を行っているのかを調べたいと考えています。
-協力してくださる方は、1体目の妖怪を変更する前後それぞれの、暗号化されている*.ywファイル全てをお送りください。
-暗号化されたセーブデータは、svdtを使って抽出できます。
