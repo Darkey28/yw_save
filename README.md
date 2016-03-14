@@ -2,7 +2,7 @@
 
 This python script decrypts and encrypts save data of Yo-kai Watch.
 
-* Currently injecting doesn't work on Yo-kai Watch Busters.
+* You should make a backup before injecting new savedata.
 
 ## Requirements
 
