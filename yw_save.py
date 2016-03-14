@@ -252,7 +252,7 @@ def ywb_proc(data, isEncrypt, key=None, head=None, validator=gamefix.busters.val
 
         # Getto-gumi
         if getto:
-            if sub(headData, 0) != 0x4000:
+            if sub(headData, 0) & 0x4000:
                 a = ~a & 0xFFFFFFFF
 
         myCipher = YWCipher(a, sub(headData, 0x0A) & 0xFF)
