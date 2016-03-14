@@ -33,7 +33,7 @@ import struct
 import binascii
 import argparse
 import logging
-import crc_fix
+import gamefix.shinuchi
 from util import Xorshift
 
 haveCrypto = False
@@ -203,7 +203,6 @@ def yw_proc(data, isEncrypt, key=None, head=None, preserveCRC=False, modifyOffse
 def yw2_proc(data, isEncrypt, key=b"5+NI8WVq09V7LI5w", head=None, modifyOffset=0xE1B0):
     """
     tested with Shin'uchi
-        shin'uchi modifyOffset: 0xE1B0
     """
     ccm = CCMCipher(key)
     nonce = data[:12]
@@ -221,8 +220,13 @@ def yw2_proc(data, isEncrypt, key=b"5+NI8WVq09V7LI5w", head=None, modifyOffset=0
         if len(nonce) != 12:
             logging.error("Invalid length of nonce")
             return None
-        # encrypt except header, preserving crc32
-        out = yw_proc(data[0x20:], isEncrypt, preserveCRC=True, modifyOffset=modifyOffset)
+        # validate and fix
+        result = gamefix.shinuchi.validate(data[0x20:])
+        if not result:
+            logging.error("Invalid savedata")
+            return None
+        # encrypt except header
+        out = yw_proc(result, isEncrypt, preserveCRC=False)
         if not out:
             return None
         out = ccm.encrypt(out, nonce)
