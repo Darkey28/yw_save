@@ -41,15 +41,15 @@ class Xorshift:
         seed = seed + 1
         self.states[0] = seed
 
-        t = seed ^ (seed >> 30)
-        t = (t * (0x6C078966 - 1)) & 0xFFFFFFFF
-        t = t + 2
-        self.states[1] = t
+        seed = seed ^ (seed >> 30)
+        seed = (seed * (0x6C078966 - 1)) & 0xFFFFFFFF
+        seed = seed + 2
+        self.states[1] = seed
 
-        u = t ^ (t >> 30)
-        u = (u * (0x6C078966 - 1)) & 0xFFFFFFFF
-        u = u + 3
-        self.states[2] = u
+        seed = seed ^ (seed >> 30)
+        seed = (seed * (0x6C078966 - 1)) & 0xFFFFFFFF
+        seed = seed + 3
+        self.states[2] = seed
 
     def xorshift(self, arg):
         x = self.states[0]
