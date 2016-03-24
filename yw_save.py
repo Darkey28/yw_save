@@ -42,7 +42,6 @@ haveCrypto = False
 try:
     from Crypto.Cipher import AES
     from Crypto.Util import Counter
-    from Crypto import Random
     haveCrypto = True
 except:
     pass
