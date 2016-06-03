@@ -310,7 +310,7 @@ def main():
     parser.add_argument("--game", dest="game", action="store", default="yw",
                         choices=games, help="game (default: yw)")
     parser.add_argument("--head", dest="head", action="store", default=None,
-                        help="head.yw (only needed for busters)")
+                        help="head.yw (only needed for Ganso / Honke 2.X and Busters)")
     parser.add_argument("input_file", help="file to encrypt or decrypt")
     parser.add_argument("output_file", help="ouput file name")
     args = parser.parse_args()
