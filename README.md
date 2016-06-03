@@ -12,12 +12,14 @@ This python script decrypts and encrypts save data of Yo-kai Watch.
 PyCrypto is necessary for handling save data of Yo-kai Watch 2 and Busters.
 
 ## Supported games
-| game                            | decryption | encryption |
-| ------------------------------- | ---------- | ---------- |
-| Yo-kai Watch                    | yes        | yes        |
-| Yo-kai Watch 2 Shin'uchi        | yes        | yes        |
-| Yo-kai Watch Busters            | yes        | yes        |
-| Yo-kai Watch Busters Getto-gumi | yes        | yes        |
+| game                             | decryption | encryption | head.yw needed | option     |
+| -------------------------------- | ---------- | ---------- | -------------- | ---------- |
+| Yo-kai Watch                     | yes        | yes        | no             | -yw        |
+| Yo-kai Watch 2 Ganso / Honke 1.X | yes        | yes        | no             | -yw2       |
+| Yo-kai Watch 2 Ganso / Honke 2.X | yes        | yes        | yes            | -yw2x      |
+| Yo-kai Watch 2 Shin'uchi         | yes        | yes        | no             | -yw2       |
+| Yo-kai Watch Busters             | yes        | yes        | yes            | -ywb       |
+| Yo-kai Watch Busters Getto-gumi  | yes        | yes        | yes            | -ywb_getto |
 
 ## Usage
 
@@ -39,6 +41,7 @@ then inject it with svdt.
 Decrypting, encrypting and injecting work with:
 
 * Yo-kai Watch
+* Yo-kai Watch 2 Ganso / Honke
 * Yo-kai Watch 2 Shin'uchi
 * Yo-kai Watch Busters
 * Yo-kai Watch Busters Getto-gumi
@@ -46,7 +49,8 @@ Decrypting, encrypting and injecting work with:
 You can specify the game with "--game" option.
 
 * --game yw (default) : Yo-kai Watch 1
-* --game yw2 : Yo-kai Watch 2 Shin'uchi
+* --game yw2 : Yo-kai Watch 2 Ganso / Honke version 1.X and Shin'uchi
+* --game yw2x : Yo-kai Watch 2 Ganso / Honke version 2.X
 * --game ywb : Yo-kai Watch Busters
 * --game ywb_getto : Yo-kai Watch Busters Getto-gumi
 
