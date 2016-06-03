@@ -233,7 +233,7 @@ def yw2x_proc(data, isEncrypt, key=None, head=None, validator=gamefix.shinuchi.v
     Ganso / Honke version 2.x
     """
     key = bytearray()
-    
+
     if not head:
         logging.error("You need head.yw to process Yo-kai Watch Ganso / Honke ver.2.x save data."
                       "Please specify the file with --head option.")
@@ -248,7 +248,6 @@ def yw2x_proc(data, isEncrypt, key=None, head=None, validator=gamefix.shinuchi.v
         for i in range(0x10):
             key.append(myCipher.xorshift(0x100))
     return yw2_proc(data, isEncrypt, key=bytes(key), validator=None)
-    
 
 def ywb_proc(data, isEncrypt, key=None, head=None, validator=gamefix.busters.validate, getto=False):
     def sub(data, r1):
