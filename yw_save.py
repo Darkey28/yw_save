@@ -33,6 +33,7 @@ import struct
 import binascii
 import argparse
 import logging
+import gamefix.gansohonke
 import gamefix.shinuchi
 import gamefix.busters
 from util import Xorshift
@@ -228,7 +229,7 @@ def yw2_proc(data, isEncrypt, key=b"5+NI8WVq09V7LI5w", head=None, validator=game
         out = ccm.encrypt(out, nonce)
     return out
 
-def yw2x_proc(data, isEncrypt, key=None, head=None, validator=gamefix.shinuchi.validate):
+def yw2x_proc(data, isEncrypt, key=None, head=None, validator=gamefix.gansohonke.validate):
     """
     Ganso / Honke version 2.x
     """
@@ -247,7 +248,7 @@ def yw2x_proc(data, isEncrypt, key=None, head=None, validator=gamefix.shinuchi.v
         myCipher = Xorshift(a)
         for i in range(0x10):
             key.append(myCipher.xorshift(0x100))
-    return yw2_proc(data, isEncrypt, key=bytes(key), validator=None)
+    return yw2_proc(data, isEncrypt, key=bytes(key), validator=validator)
 
 def ywb_proc(data, isEncrypt, key=None, head=None, validator=gamefix.busters.validate, getto=False):
     def sub(data, r1):
