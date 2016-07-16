@@ -9,7 +9,7 @@ This python script decrypts and encrypts save data of Yo-kai Watch.
 * Python 3.x
 * PyCrypto (Optional)
 
-PyCrypto is necessary for handling save data of Yo-kai Watch 2 and Busters.
+PyCrypto is necessary for handling save data of Yo-kai Watch 2, Busters, and 3.
 
 ## Supported games
 | game                             | decryption | encryption | head.yw needed | option     |
@@ -20,6 +20,7 @@ PyCrypto is necessary for handling save data of Yo-kai Watch 2 and Busters.
 | Yo-kai Watch 2 Shin'uchi         | yes        | yes        | no             | -yw2       |
 | Yo-kai Watch Busters             | yes        | yes        | yes            | -ywb       |
 | Yo-kai Watch Busters Getto-gumi  | yes        | yes        | yes            | -ywb_getto |
+| Yo-kai Watch 3                   | yes        | yes        | yes            | -yw3       |
 
 ## Usage
 
