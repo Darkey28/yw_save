@@ -36,6 +36,7 @@ import logging
 import gamefix.gansohonke
 import gamefix.shinuchi
 import gamefix.busters
+import gamefix.yw3
 from util import Xorshift
 
 haveCrypto = False
@@ -288,6 +289,45 @@ def ywb_proc(data, isEncrypt, key=None, head=None, validator=gamefix.busters.val
 def ywb_getto_proc(data, isEncrypt, key=None, head=None, validator=gamefix.busters.validate, getto=True):
     return ywb_proc(data, isEncrypt, key=key, head=head, validator=validator, getto=getto)
 
+def yw3_proc(data, isEncrypt, key=None, head=None, validator=gamefix.yw3.validate):
+    def sub(data):
+        r2 = struct.unpack("<I", data[0x10:0x10+4])[0]
+        if r2 != 0:
+            r2 = r2 - 1
+        pos = r2 * 0xA8 + 0x20
+        if pos == 0:
+            return 0
+        pos = pos + 8 + 0x30
+        return struct.unpack("<I", data[pos:pos+4])[0]
+    def sub2(data):
+        r2 = struct.unpack("<I", data[0x10:0x10+4])[0]
+        if r2 != 0:
+            r2 = r2 - 1
+        pos = r2 * 0xA8 + 0x20
+        if pos == 0:
+            return 0
+        pos = pos + 0x40
+        return sum(struct.unpack("<6I", data[pos:pos+4*6])) & 0xFF
+
+    key = bytearray()
+
+    if not head:
+        logging.error("You need head.yw to process Yo-kai Watch 3 save data."
+                      "Please specify the file with --head option.")
+        return None
+
+    with open(head, "rb") as f:
+        # decrypt head.yw
+        headData = yw_proc(f.read(), isEncrypt=False)
+
+        a = struct.unpack("<I", headData[0x0C:0x0C+4])[0]
+        a ^= sub(headData)
+
+        myCipher = YWCipher(a, sub2(headData) & 0xFF)
+        for i in range(0x10):
+            key.append(myCipher.xorshift(0x100))
+    return yw2_proc(data, isEncrypt, key=bytes(key), validator=validator)
+
 def process(infile, outfile, gameType, isEncrypt, head=None):
     with open(infile, "rb") as f:
         data = f.read()
@@ -299,7 +339,7 @@ def process(infile, outfile, gameType, isEncrypt, head=None):
             return 0
         return 1
 
-games = {"yw": yw_proc, "yw2": yw2_proc, "yw2x": yw2x_proc, "ywb": ywb_proc, "ywb_getto": ywb_getto_proc}
+games = {"yw": yw_proc, "yw2": yw2_proc, "yw2x": yw2x_proc, "ywb": ywb_proc, "ywb_getto": ywb_getto_proc, "yw3": yw3_proc}
 
 def main():
     logging.basicConfig(format="%(levelname)s: [%(funcName)s] %(message)s")
