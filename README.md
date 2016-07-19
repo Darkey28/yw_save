@@ -46,6 +46,7 @@ Decrypting, encrypting and injecting work with:
 * Yo-kai Watch 2 Shin'uchi
 * Yo-kai Watch Busters
 * Yo-kai Watch Busters Getto-gumi
+* Yo-kai Watch 3
 
 You can specify the game with "--game" option.
 
@@ -54,6 +55,7 @@ You can specify the game with "--game" option.
 * --game yw2x : Yo-kai Watch 2 Ganso / Honke version 2.X
 * --game ywb : Yo-kai Watch Busters
 * --game ywb_getto : Yo-kai Watch Busters Getto-gumi
+* --game yw3 : Yo-kai Watch 3
 
 ### Getto-gumi
 Example config.txt for Yo-kai Watch Busters Akanekodan Getto-gumi
