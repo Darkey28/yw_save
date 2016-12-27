@@ -12,15 +12,15 @@ This python script decrypts and encrypts save data of Yo-kai Watch.
 PyCrypto is necessary for handling save data of Yo-kai Watch 2, Busters, and 3.
 
 ## Supported games
-| game                             | decryption | encryption | head.yw needed | option     |
-| -------------------------------- | ---------- | ---------- | -------------- | ---------- |
-| Yo-kai Watch                     | yes        | yes        | no             | -yw        |
-| Yo-kai Watch 2 Ganso / Honke 1.X | yes        | yes        | no             | -yw2       |
-| Yo-kai Watch 2 Ganso / Honke 2.X | yes        | yes        | yes            | -yw2x      |
-| Yo-kai Watch 2 Shin'uchi         | yes        | yes        | no             | -yw2       |
-| Yo-kai Watch Busters             | yes        | yes        | yes            | -ywb       |
-| Yo-kai Watch Busters Getto-gumi  | yes        | yes        | yes            | -ywb_getto |
-| Yo-kai Watch 3                   | yes        | yes        | yes            | -yw3       |
+| game                             | decryption | encryption | head.yw needed | option           |
+| -------------------------------- | ---------- | ---------- | -------------- | ---------------- |
+| Yo-kai Watch                     | yes        | yes        | no             | --game yw        |
+| Yo-kai Watch 2 Ganso / Honke 1.X | yes        | yes        | no             | --game yw2       |
+| Yo-kai Watch 2 Ganso / Honke 2.X | yes        | yes        | yes            | --game yw2x      |
+| Yo-kai Watch 2 Shin'uchi         | yes        | yes        | no             | --game yw2       |
+| Yo-kai Watch Busters             | yes        | yes        | yes            | --game ywb       |
+| Yo-kai Watch Busters Getto-gumi  | yes        | yes        | yes            | --game ywb_getto |
+| Yo-kai Watch 3                   | yes        | yes        | yes            | --game yw3       |
 
 ## Usage
 
